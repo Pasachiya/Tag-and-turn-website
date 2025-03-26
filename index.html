@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tag & Turn - Eco-Friendly Bookmarks</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+</head>
+<body>
+    <div class="wrapper">
+        <header class="header">
+            <div class="container">
+                <nav class="navbar">
+                    <a href="index.html" class="logo">
+                        <img src="./Tag & Turn Logo.jpg" alt="Tag & Turn Logo">
+                    </a>
+                    <div class="nav-links">
+                        <a href="index.html" class="nav-link">Home</a>
+                        <a href="product.html" class="nav-link">Products</a>
+                        <a href="cart.html" class="nav-link cart-link">
+                            <i data-feather="shopping-cart"></i>
+                            <span id="cart-count" class="cart-count">0</span>
+                        </a>
+                    </div>
+                </nav>
+            </div>
+        </header>
+
+        <main>
+            <section class="hero">
+                <div class="container">
+                    <div class="hero-content">
+                        <h1 class="hero-title">Elevate Your Reading Experience</h1>
+                        <p class="hero-subtitle">Sustainable, Personalized Bookmarks for University Scholars</p>
+                        <div class="hero-cta">
+                            <a href="product.html" class="btn btn-primary">Explore Our Collection</a>
+                            <a href="#features" class="btn btn-secondary">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="features" class="features">
+                <div class="container">
+                    <div class="feature-grid">
+                        <div class="feature">
+                            <i data-feather="leaf" class="feature-icon"></i>
+                            <h3>Eco-Friendly</h3>
+                            <p>Sustainable materials and printing processes</p>
+                        </div>
+                        <div class="feature">
+                            <i data-feather="book-open" class="feature-icon"></i>
+                            <h3>Custom Design</h3>
+                            <p>Personalize your reading companion</p>
+                        </div>
+                        <div class="feature">
+                            <i data-feather="award" class="feature-icon"></i>
+                            <h3>Premium Quality</h3>
+                            <p>Crafted with precision and care</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-brand">
+                        <img src="./Tag & Turn Logo.jpg" alt="Tag & Turn Logo">
+                        <p>&copy; 2025 Tag & Turn. All rights reserved.</p>
+                    </div>
+                    <div class="footer-links">
+                        <a href="#" class="footer-link">Privacy Policy</a>
+                        <a href="#" class="footer-link">Terms of Service</a>
+                        <a href="#" class="footer-link">Contact</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Initialize Feather Icons
+        feather.replace();
+    </script>
+</body>
+</html>
