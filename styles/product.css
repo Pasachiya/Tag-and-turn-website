@@ -67,14 +67,21 @@
     padding: 0.5rem 1rem;
     font-size: 0.9rem;
     min-width: auto;
+    background-color: transparent;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    transition: all 0.3s ease;
 }
 
 .product-card .btn-primary {
-    box-shadow: var(--shadow-sm);
+    box-shadow: none;
 }
 
 .product-card .btn-primary:hover {
     transform: translateY(-1px);
+    background-color: var(--primary-color);
+    color: var(--white);
+    box-shadow: var(--shadow-sm);
 }
 
 /* Responsive Design */
