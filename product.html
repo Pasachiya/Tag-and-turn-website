@@ -34,6 +34,24 @@
             <section class="product-page">
                 <div class="container">
                     <h1 class="page-title">Our Collections</h1>
+                    <div class="filter-section">
+                        <div class="filter-group">
+                            <label for="category-filter">Category:</label>
+                            <select id="category-filter">
+                                <option value="all">All Categories</option>
+                                <option value="Bookmarks">Bookmarks</option>
+                                <option value="T-Shirts">T-Shirts</option>
+                                <option value="Bags">Bags</option>
+                                <option value="Banners">Banners</option>
+                                <option value="Art Prints">Art Prints</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="price-filter">Max Price:</label>
+                            <input type="range" id="price-filter" min="0" max="60" value="60" step="5">
+                            <span id="price-value">$60</span>
+                        </div>
+                    </div>
                     <div class="product-grid" id="product-grid">
                         <!-- Products will be dynamically added here -->
                     </div>

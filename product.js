@@ -1,5 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
     const productContainer = document.querySelector(".product-grid");
+    const categoryFilter = document.querySelector("#category-filter");
+    const priceFilter = document.querySelector("#price-filter");
+    const priceValue = document.querySelector("#price-value");
 
     const products = [
         // Bookmarks
@@ -133,14 +136,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     ];
 
-    function renderProducts() {
-        // Group products by category for display
-        const categories = [...new Set(products.map(p => p.category))];
+    let filteredProducts = [...products];
+
+    function renderProducts(productsToRender) {
+        const categories = [...new Set(productsToRender.map(p => p.category))];
         let html = '';
 
         categories.forEach(category => {
             html += `<h2 class="category-title">${category}</h2>`;
-            html += products
+            html += productsToRender
                 .filter(product => product.category === category)
                 .map(product => `
                     <div class="product-card" data-id="${product.id}">
@@ -159,10 +163,33 @@ document.addEventListener('DOMContentLoaded', () => {
                 `).join('');
         });
 
-        productContainer.innerHTML = html;
+        productContainer.innerHTML = html || '<p>No products match your filters.</p>';
         feather.replace();
     }
 
+    function applyFilters() {
+        const selectedCategory = categoryFilter.value;
+        const maxPrice = parseFloat(priceFilter.value);
+
+        filteredProducts = products.filter(product => {
+            const categoryMatch = selectedCategory === 'all' || product.category === selectedCategory;
+            const priceMatch = product.price <= maxPrice;
+            return categoryMatch && priceMatch;
+        });
+
+        renderProducts(filteredProducts);
+    }
+
+    // Update price display when slider moves
+    priceFilter.addEventListener('input', () => {
+        priceValue.textContent = `$${priceFilter.value}`;
+        applyFilters();
+    });
+
+    // Apply filters when category changes
+    categoryFilter.addEventListener('change', applyFilters);
+
+    // Cart functionality (keeping your existing code)
     window.addToCart = (productId) => {
         const product = products.find(p => p.id === productId);
         if (product) {
@@ -180,5 +207,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    renderProducts();
+    // Initial render
+    renderProducts(products);
 });
