@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Products - Tag & Turn</title>
+    <title>About - Tag & Turn</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./styles/base.css">
-    <link rel="stylesheet" href="./styles/product.css">
+    <link rel="stylesheet" href="./styles/about.css">
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
 </head>
 <body>
@@ -19,8 +19,8 @@
                     </a>
                     <div class="nav-links">
                         <a href="index.html" class="nav-link">Home</a>
-                        <a href="product.html" class="nav-link active">Products</a>
-                        <a href="about.html" class="nav-link">About</a>
+                        <a href="product.html" class="nav-link">Products</a>
+                        <a href="about.html" class="nav-link active">About</a>
                         <a href="cart.html" class="nav-link cart-link">
                             <i data-feather="shopping-cart"></i>
                             <span id="cart-count" class="cart-count">0</span>
@@ -31,11 +31,13 @@
         </header>
 
         <main>
-            <section class="product-page">
+            <section class="about-page product-page">
                 <div class="container">
-                    <h1 class="page-title">Our Collections</h1>
-                    <div class="product-grid" id="product-grid">
-                        <!-- Products will be dynamically added here -->
+                    <h1 class="page-title">About Tag & Turn</h1>
+                    <div class="about-content">
+                        <p>Tag & Turn is more than just a bookmark company—we’re a passionate printing and publishing team dedicated to sustainability and creativity. From eco-friendly bookmarks to custom t-shirts, reusable bags, vibrant banners, and stunning art prints, we bring your ideas to life with environmentally conscious materials and processes.</p>
+                        <p>Founded in 2025, our mission is to blend quality craftsmanship with a commitment to the planet. Whether you’re a scholar, a business, or an artist, we’ve got the tools to help you stand out.</p>
+                        <a href="product.html" class="btn btn-primary">Explore Our Work</a>
                     </div>
                 </div>
             </section>
@@ -59,9 +61,7 @@
     </div>
 
     <script src="script.js"></script>
-    <script src="product.js"></script>
     <script>
-        // Initialize Feather Icons
         feather.replace();
     </script>
 </body>
