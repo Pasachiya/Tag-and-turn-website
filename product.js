@@ -137,6 +137,63 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     let filteredProducts = [...products];
+    let currentIndex = 0;
+    const slidesToShow = 3;
+
+    function renderSlider() {
+        sliderTrack.innerHTML = products.map(product => `
+            <div class="product-card" data-id="${product.id}">
+                <img src="${product.image}" alt="${product.name}" class="product-image">
+                <div class="product-details">
+                    <h3 class="product-name">${product.name}</h3>
+                    <p class="product-description">${product.description}</p>
+                    <div class="product-footer">
+                        <span class="product-price">$${product.price.toFixed(2)}</span>
+                        <button onclick="addToCart(${product.id})" class="btn btn-primary">
+                            <i data-feather="shopping-cart"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+        feather.replace();
+        updateSliderPosition();
+    }
+
+    const sliderTrack = document.querySelector("#slider-track");
+    const prevButton = document.querySelector(".slider-prev");
+    const nextButton = document.querySelector(".slider-next");
+
+    renderSlider();
+
+    let autoMoveInterval;
+
+    function startAutoMove() {
+        autoMoveInterval = setInterval(() => {
+            const maxIndex = products.length - slidesToShow;
+            if (currentIndex < maxIndex) {
+                currentIndex++;
+            } else {
+                currentIndex = 0; // Reset to the beginning
+            }
+            updateSliderPosition();
+        }, 3000); // Auto-move every 3 seconds
+    }
+
+    function stopAutoMove() {
+        clearInterval(autoMoveInterval);
+    }
+
+    // Start auto-move when the page loads
+    startAutoMove();
+
+    // Pause auto-move on user interaction
+    sliderTrack.addEventListener('mouseenter', stopAutoMove);
+    sliderTrack.addEventListener('mouseleave', startAutoMove);
+    prevButton.addEventListener('click', stopAutoMove);
+    nextButton.addEventListener('click', stopAutoMove);
+
+    const cart = [];
 
     function renderProducts(productsToRender) {
         const categories = [...new Set(productsToRender.map(p => p.category))];
@@ -179,6 +236,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
         renderProducts(filteredProducts);
     }
+
+    function updateSliderPosition() {
+        const cardWidth = sliderTrack.querySelector(".product-card").offsetWidth + 16; // Include gap
+        const offset = -currentIndex * cardWidth;
+        sliderTrack.style.transform = `translateX(${offset}px)`;
+    }
+
+    prevButton.addEventListener('click', () => {
+        if (currentIndex > 0) {
+            currentIndex--;
+            updateSliderPosition();
+        }
+    });
+
+    nextButton.addEventListener('click', () => {
+        const maxIndex = products.length - slidesToShow;
+        if (currentIndex < maxIndex) {
+            currentIndex++;
+            updateSliderPosition();
+        }
+    });
 
     // Update price display when slider moves
     priceFilter.addEventListener('input', () => {
