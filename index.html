@@ -17,6 +17,9 @@
                     <a href="index.html" class="logo">
                         <img src="./Tag & Turn Logo.jpg" alt="Tag & Turn Logo">
                     </a>
+                    <button class="mobile-nav-toggle" aria-label="Toggle navigation menu">
+                        <i class="fas fa-bars"></i>
+                      </button>
                     <div class="nav-links">
                         <a href="index.html" class="nav-link active">Home</a>
                         <a href="product.html" class="nav-link">Products</a>
@@ -26,6 +29,7 @@
                             <span id="cart-count" class="cart-count">0</span>
                         </a>
                     </div>
+                    <div class="nav-overlay"></div>
                 </nav>
             </div>
         </header>
@@ -93,6 +97,25 @@
     </div>
 
     <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
+            const navLinks = document.querySelector('.nav-links');
+            const navOverlay = document.querySelector('.nav-overlay');
+            
+            mobileNavToggle.addEventListener('click', function() {
+                navLinks.classList.toggle('active');
+                navOverlay.classList.toggle('active');
+                document.body.classList.toggle('no-scroll');
+            });
+            
+            navOverlay.addEventListener('click', function() {
+                navLinks.classList.remove('active');
+                navOverlay.classList.remove('active');
+                document.body.classList.remove('no-scroll');
+            });
+        });
+        </script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             feather.replace();

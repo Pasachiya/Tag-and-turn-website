@@ -17,6 +17,9 @@
                     <a href="index.html" class="logo">
                         <img src="./Tag & Turn Logo.jpg" alt="Tag & Turn Logo">
                     </a>
+                    <button class="mobile-nav-toggle" aria-label="Toggle navigation menu">
+                        <i class="fas fa-bars"></i>
+                      </button>
                     <div class="nav-links">
                         <a href="index.html" class="nav-link">Home</a>
                         <a href="product.html" class="nav-link">Products</a>
@@ -26,6 +29,7 @@
                             <span id="cart-count" class="cart-count">0</span>
                         </a>
                     </div>
+                    <div class="nav-overlay"></div>
                 </nav>
             </div>
         </header>
@@ -46,38 +50,42 @@
                 <div class="container">
                     <h2 class="section-title">Meet Our Team</h2>
                     <div class="team-grid">
+
                         <div class="team-member">
-                            <img src="./images/team/member1.jpg" alt="Emily Johnson" class="member-image">
-                            <h3 class="member-name">Emily Johnson</h3>
-                            <p class="member-title">Founder & Creative Director</p>
+                            <img src="https://cdn.pixabay.com/photo/2016/11/29/13/14/attractive-1869761_1280.jpg" alt="Michael Chen" class="member-image">
+                            <h3 class="member-name">Madhiya  Najimudeen</h3>
+                            <p class="member-title">CEO</p>
+                            <p class="member-idea">"Quality craftsmanship is about attention to detail and using the right materials for lasting impact."</p>
+                        </div>
+
+                        <div class="team-member">
+                            <img src="https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg" alt="Sophia Rodriguez" class="member-image">
+                            <h3 class="member-name">Ashan Serasinghe</h3>
+                            <p class="member-title">GM</p>
+                            <p class="member-idea">"Every product tells a story. I help our clients find the visual language that speaks their truth."</p>
+                        </div>
+                        <div class="team-member">
+                            <img src="https://th.bing.com/th/id/OIP.b5cfr24TX9pOMVJzEdlYUQHaE8?rs=1&pid=ImgDetMain" alt="Emily Johnson" class="member-image">
+                            <h3 class="member-name">Hiruna Rathnayaka</h3>
+                            <p class="member-title">Sales & Marketing manager</p>
                             <p class="member-idea">"Sustainability doesn't mean compromising on design. Beautiful products can also be kind to our planet."</p>
                         </div>
                         
-                        <div class="team-member">
-                            <img src="./images/team/member2.jpg" alt="Michael Chen" class="member-image">
-                            <h3 class="member-name">Michael Chen</h3>
-                            <p class="member-title">Production Manager</p>
-                            <p class="member-idea">"Quality craftsmanship is about attention to detail and using the right materials for lasting impact."</p>
-                        </div>
+                        
+                        
+                        
                         
                         <div class="team-member">
-                            <img src="./images/team/member3.jpg" alt="Sophia Rodriguez" class="member-image">
-                            <h3 class="member-name">Sophia Rodriguez</h3>
-                            <p class="member-title">Design Specialist</p>
-                            <p class="member-idea">"Every product tells a story. I help our clients find the visual language that speaks their truth."</p>
-                        </div>
-                        
-                        <div class="team-member">
-                            <img src="./images/team/member4.jpg" alt="James Wilson" class="member-image">
-                            <h3 class="member-name">James Wilson</h3>
-                            <p class="member-title">Sustainability Officer</p>
+                            <img src="https://th.bing.com/th/id/R.f3c53f5d3b1820210928d06d5c11bd80?rik=C4mTjOgJdZLVDg&pid=ImgRaw&r=0" alt="James Wilson" class="member-image">
+                            <h3 class="member-name">Anupama Amarasekara</h3>
+                            <p class="member-title">Finance manager</p>
                             <p class="member-idea">"Innovation in eco-materials is where the future of printing and publishing begins."</p>
                         </div>
                         
                         <div class="team-member">
-                            <img src="./images/team/member5.jpg" alt="Aisha Patel" class="member-image">
-                            <h3 class="member-name">Aisha Patel</h3>
-                            <p class="member-title">Client Relations Manager</p>
+                            <img src="https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg" alt="Aisha Patel" class="member-image">
+                            <h3 class="member-name">Dilki Nawanjana</h3>
+                            <p class="member-title">HR Manager</p>
                             <p class="member-idea">"Building relationships is just as important as building products. Our clients are our partners."</p>
                         </div>
                     </div>
@@ -101,7 +109,25 @@
             </div>
         </footer>
     </div>
-
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
+            const navLinks = document.querySelector('.nav-links');
+            const navOverlay = document.querySelector('.nav-overlay');
+            
+            mobileNavToggle.addEventListener('click', function() {
+                navLinks.classList.toggle('active');
+                navOverlay.classList.toggle('active');
+                document.body.classList.toggle('no-scroll');
+            });
+            
+            navOverlay.addEventListener('click', function() {
+                navLinks.classList.remove('active');
+                navOverlay.classList.remove('active');
+                document.body.classList.remove('no-scroll');
+            });
+        });
+        </script>
     <script src="script.js"></script>
     <script>
         feather.replace();

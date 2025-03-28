@@ -1,290 +1,329 @@
+// Import products array from the separate file
+import { products } from './products-data.js';
+import { showPopup, hidePopup } from './scripts/popup.js';
+import { addItemToCart } from './script.js';
+
 document.addEventListener('DOMContentLoaded', () => {
-    const productContainer = document.querySelector(".product-grid");
-    const categoryFilter = document.querySelector("#category-filter");
-    const priceFilter = document.querySelector("#price-filter");
-    const priceValue = document.querySelector("#price-value");
+    // Immediately check if the popup overlay exists
+    const popupOverlayCheck = document.querySelector('.popup-overlay');
+    console.log('Initial popup overlay check:', popupOverlayCheck);
+    
+    // Log the HTML structure to see if the popup exists in the DOM
+    console.log('Body HTML:', document.body.innerHTML);
+    
+    try {
+        // Debugging: Log products to ensure they are imported correctly
+        console.log('Imported products:', products);
 
-    const products = [
-        // Bookmarks
-        {
-            id: 1,
-            category: "Bookmarks",
-            name: "Classic Scholar Bookmark",
-            description: "Minimalist design for serious readers",
-            price: 9.99,
-            image: "./images/bookmark-1.jpg"
-        },
-        {
-            id: 2,
-            category: "Bookmarks",
-            name: "Nature Lover's Bookmark",
-            description: "Eco-friendly design with botanical prints",
-            price: 12.99,
-            image: "./images/bookmark-2.jpg"
-        },
-        {
-            id: 3,
-            category: "Bookmarks",
-            name: "Minimalist Traveler Bookmark",
-            description: "Compact and elegant design",
-            price: 10.99,
-            image: "./images/bookmark-3.jpg"
-        },
+        const productContainer = document.querySelector(".product-grid");
+        const categoryFilter = document.querySelector("#category-filter");
+        const priceFilter = document.querySelector("#price-filter");
+        const priceValue = document.querySelector("#price-value");
+        const sliderTrack = document.querySelector("#slider-track");
+        const prevButton = document.querySelector(".slider-prev");
+        const nextButton = document.querySelector(".slider-next");
 
-        // T-Shirts
-        {
-            id: 4,
-            category: "T-Shirts",
-            name: "Eco-Friendly Graphic Tee",
-            description: "Organic cotton with bold custom prints",
-            price: 24.99,
-            image: "./images/tshirt-1.jpg"
-        },
-        {
-            id: 5,
-            category: "T-Shirts",
-            name: "Scholar Spirit T-Shirt",
-            description: "Perfect for university pride",
-            price: 22.99,
-            image: "./images/tshirt-2.jpg"
-        },
-        {
-            id: 6,
-            category: "T-Shirts",
-            name: "Minimalist Logo Tee",
-            description: "Sleek and simple eco-conscious design",
-            price: 19.99,
-            image: "./images/tshirt-3.jpg"
-        },
-
-        // Bags
-        {
-            id: 7,
-            category: "Bags",
-            name: "Reusable Canvas Tote",
-            description: "Durable and stylish for everyday use",
-            price: 19.99,
-            image: "./images/bag-1.jpeg"
-        },
-        {
-            id: 8,
-            category: "Bags",
-            name: "Eco-Backpack",
-            description: "Sustainable materials for students",
-            price: 34.99,
-            image: "./images/bag-2.png"
-        },
-        {
-            id: 9,
-            category: "Bags",
-            name: "Printed Shopping Bag",
-            description: "Custom art on recycled fabric",
-            price: 15.99,
-            image: "./images/bag-3.png"
-        },
-
-        // Banners
-        {
-            id: 10,
-            category: "Banners",
-            name: "Custom Event Banner",
-            description: "Vibrant, weather-resistant design",
-            price: 49.99,
-            image: "./images/banner-1.jpg"
-        },
-        {
-            id: 11,
-            category: "Banners",
-            name: "Eco-Friendly Trade Show Banner",
-            description: "Sustainable and eye-catching",
-            price: 59.99,
-            image: "./images/banner-2.jpeg"
-        },
-        {
-            id: 12,
-            category: "Banners",
-            name: "Celebration Banner",
-            description: "Perfect for parties and events",
-            price: 39.99,
-            image: "./images/banner-3.jpeg"
-        },
-
-        // Art Prints
-        {
-            id: 13,
-            category: "Art Prints",
-            name: "Nature Art Print",
-            description: "High-quality eco-friendly wall art",
-            price: 29.99,
-            image: "./images/art-1.jpg"
-        },
-        {
-            id: 14,
-            category: "Art Prints",
-            name: "Abstract Scholar Print",
-            description: "Bold design for modern spaces",
-            price: 34.99,
-            image: "./images/art-2.jpg"
-        },
-        {
-            id: 15,
-            category: "Art Prints",
-            name: "Vintage Map Print",
-            description: "Eco-printed classic artwork",
-            price: 27.99,
-            image: "./images/art-3.jpeg"
+        if (!productContainer || !sliderTrack || !categoryFilter || !priceFilter) {
+            console.error('One or more DOM elements are missing.');
+            return;
         }
-    ];
 
-    let filteredProducts = [...products];
-    let currentIndex = 0;
-    const slidesToShow = 3;
+        let filteredProducts = [...products];
+        let currentIndex = 0;
+        const slidesToShow = 3;
+        const cart = [];
+        let autoMoveInterval;
+        let debounceTimer;
 
-    function renderSlider() {
-        sliderTrack.innerHTML = products.map(product => `
-            <div class="product-card" data-id="${product.id}">
-                <img src="${product.image}" alt="${product.name}" class="product-image">
-                <div class="product-details">
-                    <h3 class="product-name">${product.name}</h3>
-                    <p class="product-description">${product.description}</p>
-                    <div class="product-footer">
-                        <span class="product-price">$${product.price.toFixed(2)}</span>
-                        <button onclick="addToCart(${product.id})" class="btn btn-primary">
-                            <i data-feather="shopping-cart"></i> Add to Cart
-                        </button>
-                    </div>
-                </div>
-            </div>
-        `).join('');
-        feather.replace();
-        updateSliderPosition();
-    }
-
-    const sliderTrack = document.querySelector("#slider-track");
-    const prevButton = document.querySelector(".slider-prev");
-    const nextButton = document.querySelector(".slider-next");
-
-    renderSlider();
-
-    let autoMoveInterval;
-
-    function startAutoMove() {
-        autoMoveInterval = setInterval(() => {
-            const maxIndex = products.length - slidesToShow;
-            if (currentIndex < maxIndex) {
-                currentIndex++;
-            } else {
-                currentIndex = 0; // Reset to the beginning
-            }
-            updateSliderPosition();
-        }, 3000); // Auto-move every 3 seconds
-    }
-
-    function stopAutoMove() {
-        clearInterval(autoMoveInterval);
-    }
-
-    // Start auto-move when the page loads
-    startAutoMove();
-
-    // Pause auto-move on user interaction
-    sliderTrack.addEventListener('mouseenter', stopAutoMove);
-    sliderTrack.addEventListener('mouseleave', startAutoMove);
-    prevButton.addEventListener('click', stopAutoMove);
-    nextButton.addEventListener('click', stopAutoMove);
-
-    const cart = [];
-
-    function renderProducts(productsToRender) {
-        const categories = [...new Set(productsToRender.map(p => p.category))];
-        let html = '';
-
-        categories.forEach(category => {
-            html += `<h2 class="category-title">${category}</h2>`;
-            html += productsToRender
-                .filter(product => product.category === category)
-                .map(product => `
-                    <div class="product-card" data-id="${product.id}">
-                        <img src="${product.image}" alt="${product.name}" class="product-image">
-                        <div class="product-details">
-                            <h3 class="product-name">${product.name}</h3>
-                            <p class="product-description">${product.description}</p>
-                            <div class="product-footer">
-                                <span class="product-price">$${product.price.toFixed(2)}</span>
-                                <button onclick="addToCart(${product.id})" class="btn btn-primary">
-                                    <i data-feather="shopping-cart"></i> Add to Cart
-                                </button>
-                            </div>
+        // Render slider
+        function renderSlider() {
+            console.log('Rendering slider with products:', filteredProducts);
+            sliderTrack.innerHTML = filteredProducts.map(product => `
+                <div class="product-card" data-id="${product.id}">
+                    <img src="${product.image}" alt="${product.name}" class="product-image">
+                    <div class="product-details">
+                        <h3 class="product-name">${product.name}</h3>
+                        <p class="product-description">${product.description}</p>
+                        <div class="product-footer">
+                            <span class="product-price">LKR ${product.price.toFixed(2)}</span>
+                            <button class="btn btn-primary">
+                                <i data-feather="shopping-cart"></i> Add to Cart
+                            </button>
                         </div>
                     </div>
-                `).join('');
-        });
-
-        productContainer.innerHTML = html || '<p>No products match your filters.</p>';
-        feather.replace();
-    }
-
-    function applyFilters() {
-        const selectedCategory = categoryFilter.value;
-        const maxPrice = parseFloat(priceFilter.value);
-
-        filteredProducts = products.filter(product => {
-            const categoryMatch = selectedCategory === 'all' || product.category === selectedCategory;
-            const priceMatch = product.price <= maxPrice;
-            return categoryMatch && priceMatch;
-        });
-
-        renderProducts(filteredProducts);
-    }
-
-    function updateSliderPosition() {
-        const cardWidth = sliderTrack.querySelector(".product-card").offsetWidth + 16; // Include gap
-        const offset = -currentIndex * cardWidth;
-        sliderTrack.style.transform = `translateX(${offset}px)`;
-    }
-
-    prevButton.addEventListener('click', () => {
-        if (currentIndex > 0) {
-            currentIndex--;
+                </div>
+            `).join('');
+            feather.replace();
             updateSliderPosition();
+            addCartEventListeners();
         }
-    });
 
-    nextButton.addEventListener('click', () => {
-        const maxIndex = products.length - slidesToShow;
-        if (currentIndex < maxIndex) {
-            currentIndex++;
-            updateSliderPosition();
+        // Render products in grid
+        function renderProducts(productsToRender) {
+            console.log('Rendering products in grid:', productsToRender);
+            const categories = [...new Set(productsToRender.map(p => p.category))];
+            let html = '';
+
+            categories.forEach(category => {
+                html += `<h2 class="category-title">${category}</h2>`;
+                html += productsToRender
+                    .filter(product => product.category === category)
+                    .map(product => `
+                        <div class="product-card" data-id="${product.id}">
+                            <img src="${product.image}" alt="${product.name}" class="product-image">
+                            <div class="product-details">
+                                <h3 class="product-name">${product.name}</h3>
+                                <p class="product-description">${product.description}</p>
+                                <div class="product-footer">
+                                    <span class="product-price">LKR ${product.price.toFixed(2)}</span>
+                                    <button class="btn btn-primary">
+                                        <i data-feather="shopping-cart"></i> Add to Cart
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+            });
+
+            productContainer.innerHTML = html || '<p>No products match your filters.</p>';
+            feather.replace();
+            addCartEventListeners();
         }
-    });
 
-    // Update price display when slider moves
-    priceFilter.addEventListener('input', () => {
-        priceValue.textContent = `$${priceFilter.value}`;
-        applyFilters();
-    });
+        // Add cart button event listeners
+        function addCartEventListeners() {
+            console.log('Adding cart event listeners');
+            document.querySelectorAll('.btn-primary').forEach(button => {
+                button.removeEventListener('click', handleCartClick); // Remove existing listeners to prevent duplicates
+                button.addEventListener('click', handleCartClick);
+            });
+        }
 
-    // Apply filters when category changes
-    categoryFilter.addEventListener('change', applyFilters);
+        // Separate handler function for the click event
+        function handleCartClick(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Cart button clicked', e.target);
+            
+            // Find the product card regardless of where inside the button was clicked
+            const card = e.target.closest('.product-card');
+            if (!card) {
+                console.error('Could not find product card');
+                return;
+            }
+            
+            const productId = parseInt(card.dataset.id);
+            console.log('Product ID:', productId);
+            
+            const product = products.find(p => p.id === productId);
+            if (product) {
+                if (product.styles && product.styles.length > 0) {
+                    // Product has styles available
+                    console.log('Opening popup for product:', product.name);
+                    showPopup(productId, product.styles);
+                } else {
+                    // No styles available
+                    showNotification(`No available styles for ${product.name} at this moment`, true);
+                }
+            } else {
+                console.error('Product not found:', productId);
+            }
+        }
 
-    // Cart functionality (keeping your existing code)
-    window.addToCart = (productId) => {
-        const product = products.find(p => p.id === productId);
-        if (product) {
-            cart.push(product);
-            updateCartCount();
+        // Add to cart functionality - Update this function
+        function addToCart(productId, styleIndex = null) {
+            const product = products.find(p => p.id === productId);
+            if (product) {
+                // Create a copy of the product with style information if available
+                const cartItem = { 
+                    ...product,
+                    selectedStyle: styleIndex !== null && product.styles ? product.styles[styleIndex] : null
+                };
+                
+                // Use the addItemToCart function from script.js
+                addItemToCart(cartItem);
+                showNotification(`${product.name} added to cart`);
+            }
+        }
+
+        // Show notification
+        function showNotification(message, isWarning = false) {
             const notification = document.createElement('div');
-            notification.className = 'notification';
+            notification.className = isWarning ? 'notification notification-warning' : 'notification';
             notification.innerHTML = `
-                <i data-feather="check-circle"></i>
-                ${product.name} added to cart
+                <i data-feather="${isWarning ? 'alert-circle' : 'check-circle'}"></i>
+                ${message}
             `;
             document.body.appendChild(notification);
             feather.replace();
             setTimeout(() => notification.remove(), 3000);
         }
-    };
 
-    // Initial render
-    renderProducts(products);
+        // Apply filters - adjusted for direct LKR values
+        function applyFilters() {
+            const selectedCategory = categoryFilter.value;
+            const maxPriceLKR = parseFloat(priceFilter.value);
+
+            filteredProducts = products.filter(product => {
+                const categoryMatch = selectedCategory === 'all' || product.category === selectedCategory;
+                const priceMatch = product.price <= maxPriceLKR;
+                return categoryMatch && priceMatch;
+            });
+
+            renderProducts(filteredProducts);
+        }
+
+        // Update slider position
+        function updateSliderPosition() {
+            const cardWidth = sliderTrack.querySelector(".product-card").offsetWidth + 16;
+            const offset = -currentIndex * cardWidth;
+            sliderTrack.style.transform = `translateX(${offset}px)`;
+            updateSliderButtons();
+        }
+
+        // Update slider button states
+        function updateSliderButtons() {
+            prevButton.disabled = currentIndex === 0;
+            nextButton.disabled = currentIndex >= products.length - slidesToShow;
+        }
+
+        // Auto-move slider
+        function startAutoMove() {
+            autoMoveInterval = setInterval(() => {
+                const maxIndex = products.length - slidesToShow;
+                if (currentIndex < maxIndex) {
+                    currentIndex++;
+                } else {
+                    currentIndex = 0;
+                }
+                updateSliderPosition();
+            }, 3000);
+        }
+
+        function stopAutoMove() {
+            clearInterval(autoMoveInterval);
+        }
+
+        // Function to ensure popup element exists
+        function ensurePopupExists() {
+            let popupOverlay = document.querySelector('.popup-overlay');
+            if (!popupOverlay) {
+                console.log('Creating popup elements as they do not exist');
+                popupOverlay = document.createElement('div');
+                popupOverlay.className = 'popup-overlay';
+                popupOverlay.innerHTML = `
+                    <div class="popup">
+                        <div class="popup-content">
+                            <h2>Select Style</h2>
+                            <div class="style-options"></div>
+                            <div class="popup-buttons">
+                                <button class="btn btn-cancel">Cancel</button>
+                                <button class="btn btn-primary btn-confirm">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(popupOverlay);
+            }
+        }
+
+        // Move popup event listeners inside the DOMContentLoaded event
+        function setupPopupListeners() {
+            console.log('Setting up popup listeners');
+            const popupOverlay = document.querySelector('.popup-overlay');
+            const cancelButton = document.querySelector('.btn-cancel');
+            const addButton = document.querySelector('.btn-add');
+        
+            if (popupOverlay) {
+                popupOverlay.addEventListener('click', (e) => {
+                    if (e.target === popupOverlay) {
+                        console.log('Overlay clicked, hiding popup');
+                        hidePopup();
+                    }
+                });
+            } else {
+                console.error('Popup overlay element not found');
+            }
+        
+            if (cancelButton) {
+                cancelButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    console.log('Cancel button clicked');
+                    hidePopup();
+                });
+            } else {
+                console.error('Cancel button element not found');
+            }
+        
+            if (!addButton) {
+                console.error('Add button element not found');
+            }
+        }
+
+        // Initialize price filter with direct LKR values
+        function initializePriceFilter() {
+            const maxPrice = Math.max(...products.map(p => p.price));
+            priceFilter.max = maxPrice.toFixed(0);
+            priceFilter.value = maxPrice.toFixed(0);
+            priceValue.textContent = `LKR ${priceFilter.value}`;
+        }
+
+        // Event Listeners
+        prevButton.addEventListener('click', () => {
+            stopAutoMove();
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateSliderPosition();
+            }
+        });
+
+        nextButton.addEventListener('click', () => {
+            stopAutoMove();
+            const maxIndex = products.length - slidesToShow;
+            if (currentIndex < maxIndex) {
+                currentIndex++;
+                updateSliderPosition();
+            }
+        });
+
+        sliderTrack.addEventListener('mouseenter', stopAutoMove);
+        sliderTrack.addEventListener('mouseleave', startAutoMove);
+
+        priceFilter.addEventListener('input', () => {
+            priceValue.textContent = `LKR ${priceFilter.value}`;
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(applyFilters, 300);
+        });
+
+        categoryFilter.addEventListener('change', applyFilters);
+
+        // Initial setup
+        renderSlider();
+        initializePriceFilter();
+        renderProducts(filteredProducts);
+        startAutoMove();
+        ensurePopupExists();
+        setupPopupListeners();
+        
+        // Listen for the custom addToCart event
+        document.addEventListener('addToCart', (event) => {
+            const { productId, styleIndex } = event.detail;
+            console.log('addToCart event received:', productId, styleIndex);
+            addToCart(productId, styleIndex);
+        });
+
+        // Cleanup function
+        const cleanup = () => {
+            sliderTrack.removeEventListener('mouseenter', stopAutoMove);
+            sliderTrack.removeEventListener('mouseleave', startAutoMove);
+            prevButton.removeEventListener('click', stopAutoMove);
+            nextButton.removeEventListener('click', stopAutoMove);
+        };
+
+        // Cleanup on page unload
+        window.addEventListener('unload', cleanup);
+
+    } catch (error) {
+        console.error('Error initializing product page:', error);
+    }
 });

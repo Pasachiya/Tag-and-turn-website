@@ -136,6 +136,7 @@
 .slider-container {
     overflow: hidden;
     width: 100%;
+    max-width: 100%
 }
 
 .slider-track {
@@ -156,6 +157,9 @@
     z-index: 10;
     border-radius: 4px;
     transition: background 0.3s ease;
+    min-width: 40px;
+    min-height: 40px;
+    font-size: 1.2rem;
 }
 
 .slider-prev {
@@ -192,5 +196,14 @@
 @media (max-width: 480px) {
     .slider-track .product-card {
         flex: 0 0 150px;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
     }
 }
